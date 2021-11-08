@@ -10,7 +10,7 @@ public class Transaction {
     public byte[] signature; // this is to prevent anybody else from spending funds in our wallet.
 
     public ArrayList<TransactionInput> inputs = new ArrayList<TransactionInput>();
-    public ArrayList<TransactionOutput> outputs = new ArrayList<TransactionOutput>();
+    public ArrayList<TransactionOutputs> outputs = new ArrayList<TransactionOutputs>();
 
     private static int sequence = 0; // a rough count of how many transactions have been generated.
 
@@ -39,5 +39,61 @@ public class Transaction {
     public boolean verifiySignature() {
         String data = StringUtil.getStringFromKey(sender) + StringUtil.getStringFromKey(reciepient) + Float.toString(value)	;
         return StringUtil.verifyECDSASig(sender, data, signature);
+    }
+    public boolean processTransaction() {
+
+        if(verifiySignature() == false) {
+            System.out.println("#Transaction Signature failed to verify");
+            return false;
+        }
+
+        //gather transaction inputs (Make sure they are unspent):
+        for(TransactionInput i : inputs) {
+            i.UTXO = NoobChain.UTXOs.get(i.transactionOutputId);
+        }
+
+        //check if transaction is valid:
+        if(getInputsValue() < NoobChain.minimumTransaction) {
+            System.out.println("#Transaction Inputs to small: " + getInputsValue());
+            return false;
+        }
+
+        //generate transaction outputs:
+        float leftOver = getInputsValue() - value; //get value of inputs then the left over change:
+        transactionId = calulateHash();
+        outputs.add(new TransactionOutputs( this.reciepient, value,transactionId)); //send value to recipient
+        outputs.add(new TransactionOutputs( this.sender, leftOver,transactionId)); //send the left over 'change' back to sender
+
+        //add outputs to Unspent list
+        for(TransactionOutputs o : outputs) {
+            NoobChain.UTXOs.put(o.id , o);
+        }
+
+        //remove transaction inputs from UTXO lists as spent:
+        for(TransactionInput i : inputs) {
+            if(i.UTXO == null) continue; //if Transaction can't be found skip it
+            NoobChain.UTXOs.remove(i.UTXO.id);
+        }
+
+        return true;
+    }
+
+    //returns sum of inputs(UTXOs) values
+    public float getInputsValue() {
+        float total = 0;
+        for(TransactionInput i : inputs) {
+            if(i.UTXO == null) continue; //if Transaction can't be found skip it
+            total += i.UTXO.value;
+        }
+        return total;
+    }
+
+    //returns sum of outputs:
+    public float getOutputsValue() {
+        float total = 0;
+        for(TransactionOutputs o : outputs) {
+            total += o.value;
+        }
+        return total;
     }
 }
