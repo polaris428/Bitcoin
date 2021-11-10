@@ -38,7 +38,7 @@ public class Block {
             nonce++;
             hash = calculateHash();
         }
-        System.out.println("Block Mined!!! : " + hash);
+        System.out.println("블록 채굴!!! : " + hash);
     }
 
     //Add transactions to this block
@@ -47,12 +47,12 @@ public class Block {
         if (transaction == null) return false;
         if ((previousHash != "0")) {
             if ((transaction.processTransaction() != true)) {
-                System.out.println("Transaction failed to process. Discarded.");
+                System.out.println("거래를 처리하지 못했습니다. 폐기됨.");
                 return false;
             }
         }
         transactions.add(transaction);
-        System.out.println("Transaction Successfully added to Block");
+        System.out.println("블록에 트랜잭션이 성공적으로 추가되었습니다.");
         return true;
     }
 

@@ -43,7 +43,7 @@ public class Wallet {
     //Generates and returns a new transaction from this wallet.
     public Transaction sendFunds(PublicKey _recipient,float value ) {
         if(getBalance() < value) { //gather balance and check funds.
-            System.out.println("#Not Enough funds to send transaction. Transaction Discarded.");
+            System.out.println("#거래를 보낼 자금이 충분하지 않습니다. 거래가 삭제되었습니다.");
             return null;
         }
         //create array list of inputs

@@ -54,7 +54,7 @@ public class Transaction {
 
         //check if transaction is valid:
         if(getInputsValue() < NoobChain.minimumTransaction) {
-            System.out.println("#Transaction Inputs to small: " + getInputsValue());
+            System.out.println("#작은 거래 입력: " + getInputsValue());
             return false;
         }
 
