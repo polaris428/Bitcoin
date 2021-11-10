@@ -48,9 +48,14 @@ public class Transaction {
         }
 
         //트랜잭션 입력 수집(사용되지 않았는지 확인):
-        for(TransactionInput i : inputs) {
-            i.UTXO = NoobChain.UTXOs.get(i.transactionOutputId);
+        if(inputs!=null){
+            for(TransactionInput i : inputs) {
+                i.UTXO = NoobChain.UTXOs.get(i.transactionOutputId);
+            }
+        }else{
+            System.out.println("초기 불록 위조 감지됨");
         }
+
 
         //거래가 유효한지 확인:
         if(getInputsValue() < NoobChain.minimumTransaction) {
@@ -81,11 +86,17 @@ public class Transaction {
     //입력(UTXO) 값의 합계를 반환합니다.
     public float getInputsValue() {
         float total = 0;
-        for(TransactionInput i : inputs) {
-            if(i.UTXO == null) continue; //if Transaction can't be found skip it
-            total += i.UTXO.value;
+        if(inputs!=null){
+            for(TransactionInput i : inputs) {
+                if(i.UTXO == null) continue; //if Transaction can't be found skip it
+                total += i.UTXO.value;
+            }
+            return total;
+        }else{
+            System.out.println("초기 불록 위조 확인 \n 거래가 중지 되었습니다");
+            System.exit(0);
         }
-        return total;
+       return 0;
     }
 
     //출력 합계를 반환합니다.:

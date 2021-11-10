@@ -50,6 +50,7 @@ public class Block {
                 System.out.println("거래를 처리하지 못했습니다. 폐기됨.");
                 return false;
             }
+
         }
         transactions.add(transaction);
         System.out.println("블록에 트랜잭션이 성공적으로 추가되었습니다.");
