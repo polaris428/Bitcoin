@@ -15,15 +15,15 @@ public class NoobChain {
     public static Transaction genesisTransaction;
 
     public static void main(String[] args) {
-        //add our blocks to the blockchain ArrayList:
-        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider()); //Setup Bouncey castle as a Security Provider
+        //블록체인 ArrayList에 블록을 추가합니다.
+        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider()); //보안 공급자로 바운시 캐슬 설정
 
         //Create wallets:
         walletA = new Wallet();
         walletB = new Wallet();
         Wallet coinbase = new Wallet();
 
-        //create genesis transaction, which sends 100 NoobCoin to walletA:
+        //100 NoobCoin을 walletA로 보내는 제네시스 트랜잭션 생성:
         genesisTransaction = new Transaction(coinbase.publicKey, walletA.publicKey, 100f, null);
         genesisTransaction.generateSignature(coinbase.privateKey);     //manually sign the genesis transaction
         genesisTransaction.transactionId = "0"; //manually set the transaction id
@@ -35,7 +35,7 @@ public class NoobChain {
         genesis.addTransaction(genesisTransaction);
         addBlock(genesis);
 
-        //testing
+        //테스트
         Block block1 = new Block(genesis.hash);
         System.out.println("\nWalletA의 잔액은 다음과 같습니다.: " + walletA.getBalance());
         System.out.println("\nWalletA가 WalletB로 자금(40)을 송금하려고 합니다...\n");
@@ -73,23 +73,23 @@ public class NoobChain {
 
             currentBlock = blockchain.get(i);
             previousBlock = blockchain.get(i - 1);
-            //compare registered hash and calculated hash:
+            //등록된 해시와 계산된 해시 비교:
             if (!currentBlock.hash.equals(currentBlock.calculateHash())) {
                 System.out.println("#현재 해쉬가 같지않음");
                 return false;
             }
-            //compare previous hash and registered previous hash
+            //이전 해시와 등록된 이전 해시 비교
             if (!previousBlock.hash.equals(currentBlock.previousHash)) {
                 System.out.println("이전 해시가 같지 않음");
                 return false;
             }
-            //check if hash is solved
+            //해시가 해결되었는지 확인
             if (!currentBlock.hash.substring(0, difficulty).equals(hashTarget)) {
                 System.out.println("#이 블록은 채굴되지 않았습니다");
                 return false;
             }
 
-            //loop thru blockchains transactions:
+            //루프 스루 블록체인 트랜잭션:
             TransactionOutputs tempOutput;
             for (int t = 0; t < currentBlock.transactions.size(); t++) {
                 Transaction currentTransaction = currentBlock.transactions.get(t);

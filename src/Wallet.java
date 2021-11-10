@@ -19,10 +19,10 @@ public class Wallet {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("ECDSA","BC");
             SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
             ECGenParameterSpec ecSpec = new ECGenParameterSpec("prime192v1");
-            // Initialize the key generator and generate a KeyPair
-            keyGen.initialize(ecSpec, random);   //256 bytes provides an acceptable security level
+            //키 생성기를 초기화하고 KeyPair를 생성합니다.
+            keyGen.initialize(ecSpec, random);   //허용 가능한 보안 수준을 제공하는 256바이트
             KeyPair keyPair = keyGen.generateKeyPair();
-            // Set the public and private keys from the keyPair
+            // keyPair에서 공개 및 개인 키 설정
             privateKey = keyPair.getPrivate();
             publicKey = keyPair.getPublic();
         }catch(Exception e) {
@@ -33,20 +33,20 @@ public class Wallet {
         float total = 0;
         for (Map.Entry<String, TransactionOutputs> item: NoobChain.UTXOs.entrySet()){
             TransactionOutputs UTXO = item.getValue();
-            if(UTXO.isMine(publicKey)) { //if output belongs to me ( if coins belong to me )
-                UTXOs.put(UTXO.id,UTXO); //add it to our list of unspent transactions.
+            if(UTXO.isMine(publicKey)) { //출력이 나에게 속한 경우 (코인이 나에게 속한 경우)
+                UTXOs.put(UTXO.id,UTXO); //미사용 거래 목록에 추가하십시오.
                 total += UTXO.value ;
             }
         }
         return total;
     }
-    //Generates and returns a new transaction from this wallet.
+    //이 지갑에서 새 트랜잭션을 생성하고 반환합니다.
     public Transaction sendFunds(PublicKey _recipient,float value ) {
         if(getBalance() < value) { //gather balance and check funds.
             System.out.println("#거래를 보낼 자금이 충분하지 않습니다. 거래가 삭제되었습니다.");
             return null;
         }
-        //create array list of inputs
+        //입력 배열 목록 생성
         ArrayList<TransactionInput> inputs = new ArrayList<TransactionInput>();
 
         float total = 0;

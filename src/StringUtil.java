@@ -6,13 +6,13 @@ import java.util.Base64;
 import java.util.List;
 
 public class StringUtil {
-    //Applies Sha256 to a string and returns the result.
+    //문자열에 Sha256을 적용하고 결과를 반환함
     public static String applySha256(String input){
 
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
 
-            //Applies sha256 to our input,
+            //입력에 sha256을 적용합니다.
             byte[] hash = digest.digest(input.getBytes("UTF-8"));
 
             StringBuffer hexString = new StringBuffer(); // This will contain hash as hexidecimal
@@ -28,7 +28,7 @@ public class StringUtil {
         }
     }
 
-    //Applies ECDSA Signature and returns the result ( as bytes ).
+    //ECDSA 서명을 적용하고 결과를 바이트로 반환합니다.
     public static byte[] applyECDSASig(PrivateKey privateKey, String input) {
         Signature dsa;
         byte[] output = new byte[0];
@@ -45,7 +45,7 @@ public class StringUtil {
         return output;
     }
 
-    //Verifies a String signature
+    //문자열 서명 확인
     public static boolean verifyECDSASig(PublicKey publicKey, String data, byte[] signature) {
         try {
             Signature ecdsaVerify = Signature.getInstance("ECDSA", "BC");
@@ -57,12 +57,12 @@ public class StringUtil {
         }
     }
 
-    //Short hand helper to turn Object into a json string
+    //Object를 json 문자열로 바꿈
     public static String getJson(Object o) {
         return new GsonBuilder().setPrettyPrinting().create().toJson(o);
     }
 
-    //Returns difficulty string target, to compare to hash. eg difficulty of 5 will return "00000"
+    //해시와 비교할 난이도 문자열 대상을 반환합니다. 예: 난이도 5는 "00000"을 반환합니다.
     public static String getDificultyString(int difficulty) {
         return new String(new char[difficulty]).replace('\0', '0');
     }
