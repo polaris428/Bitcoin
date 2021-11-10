@@ -37,25 +37,25 @@ public class NoobChain extends isChainValid{
 
         //테스트
         Block block1 = new Block(genesis.hash);
-        System.out.println("\nWalletA의 잔액은 다음과 같습니다.: " + walletA.getBalance());
-        System.out.println("\nWalletA가 WalletB로 자금(40)을 송금하려고 합니다...\n");
+        System.out.println("\n동훈이의 잔액은 다음과 같습니다.: " + walletA.getBalance());
+        System.out.println("\n동훈이가 민재한테 자금(40)을 송금하려고 합니다...\n");
         block1.addTransaction(walletA.sendFunds(walletB.publicKey, 40f));
         addBlock(block1);
-        System.out.println("\nWalletA의 잔액은 다음과 같습니다.: " + walletA.getBalance());
-        System.out.println("\nWalletB의 잔액은: " + walletB.getBalance());
+        System.out.println("\n동훈이의 잔액은 다음과 같습니다.: " + walletA.getBalance());
+        System.out.println("\n민재의의 잔액은: " + walletB.getBalance());
 
         Block block2 = new Block(block1.hash);
-        System.out.println("\nWalletA 현재 보유하고 있는 금액보다 많은 금액(1000)을 송금하려고 시도 중입니다...");
+        System.out.println("\n동훈이 현재 보유하고 있는 금액보다 많은 금액(1000)을 송금하려고 시도 중입니다...");
         block2.addTransaction(walletA.sendFunds(walletB.publicKey, 1000f));
         addBlock(block2);
-        System.out.println("\nWalletA의 잔액은 다음과 같습니다. " + walletA.getBalance());
-        System.out.println("\nWalletB의 잔액은 다음과 같습니다. " + walletB.getBalance());
+        System.out.println("\n동훈이의 잔액은 다음과 같습니다. " + walletA.getBalance());
+        System.out.println("\n민재의 잔액은 다음과 같습니다. " + walletB.getBalance());
 
         Block block3 = new Block(block2.hash);
-        System.out.println("\nWalletB가 WalletA로 자금(20)을 송금하려고 합니다...");
+        System.out.println("\n민재가 동훈이로 자금(20)을 송금하려고 합니다...");
         block3.addTransaction(walletB.sendFunds(walletA.publicKey, 20));
-        System.out.println("\nWalletA의 잔액은 다음과 같습니다. " + walletA.getBalance());
-        System.out.println("WalletB의 잔액은 다음과 같습니다. " + walletB.getBalance());
+        System.out.println("\n동훈이의 잔액은 다음과 같습니다. " + walletA.getBalance());
+        System.out.println("민재의 잔액은 다음과 같습니다. " + walletB.getBalance());
         isChainValid(blockchain);
 
 
