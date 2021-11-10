@@ -30,32 +30,32 @@ public class NoobChain {
         genesisTransaction.outputs.add(new TransactionOutputs(genesisTransaction.reciepient, genesisTransaction.value, genesisTransaction.transactionId)); //manually add the Transactions Output
         UTXOs.put(genesisTransaction.outputs.get(0).id, genesisTransaction.outputs.get(0)); //its important to store our first transaction in the UTXOs list.
 
-        System.out.println("Creating and Mining Genesis block... ");
+        System.out.println("생성 및 마이닝 Genesis 블록...");
         Block genesis = new Block("0");
         genesis.addTransaction(genesisTransaction);
         addBlock(genesis);
 
         //testing
         Block block1 = new Block(genesis.hash);
-        System.out.println("\nWalletA's balance is: " + walletA.getBalance());
-        System.out.println("\nWalletA is Attempting to send funds (40) to WalletB...");
+        System.out.println("\nWalletA의 잔액은 다음과 같습니다.: " + walletA.getBalance());
+        System.out.println("\nWalletA가 WalletB로 자금(40)을 송금하려고 합니다...\n");
         block1.addTransaction(walletA.sendFunds(walletB.publicKey, 40f));
         addBlock(block1);
-        System.out.println("\nWalletA's balance is: " + walletA.getBalance());
-        System.out.println("WalletB's balance is: " + walletB.getBalance());
+        System.out.println("\nWalletA의 잔액은 다음과 같습니다.: " + walletA.getBalance());
+        System.out.println("\nWalletB의 잔액은: " + walletB.getBalance());
 
         Block block2 = new Block(block1.hash);
-        System.out.println("\nWalletA Attempting to send more funds (1000) than it has...");
+        System.out.println("\nWalletA 현재 보유하고 있는 금액보다 많은 금액(1000)을 송금하려고 시도 중입니다...");
         block2.addTransaction(walletA.sendFunds(walletB.publicKey, 1000f));
         addBlock(block2);
-        System.out.println("\nWalletA's balance is: " + walletA.getBalance());
-        System.out.println("WalletB's balance is: " + walletB.getBalance());
+        System.out.println("\nWalletA의 잔액은 다음과 같습니다. " + walletA.getBalance());
+        System.out.println("\nWalletB의 잔액은 다음과 같습니다. " + walletB.getBalance());
 
         Block block3 = new Block(block2.hash);
-        System.out.println("\nWalletB is Attempting to send funds (20) to WalletA...");
+        System.out.println("\nWalletB가 WalletA로 자금(20)을 송금하려고 합니다...");
         block3.addTransaction(walletB.sendFunds(walletA.publicKey, 20));
-        System.out.println("\nWalletA's balance is: " + walletA.getBalance());
-        System.out.println("WalletB's balance is: " + walletB.getBalance());
+        System.out.println("\nWalletA의 잔액은 다음과 같습니다. " + walletA.getBalance());
+        System.out.println("WalletB의 잔액은 다음과 같습니다. " + walletB.getBalance());
 
         isChainValid();
 
@@ -75,17 +75,17 @@ public class NoobChain {
             previousBlock = blockchain.get(i - 1);
             //compare registered hash and calculated hash:
             if (!currentBlock.hash.equals(currentBlock.calculateHash())) {
-                System.out.println("#Current Hashes not equal");
+                System.out.println("#현재 해쉬가 같지않음");
                 return false;
             }
             //compare previous hash and registered previous hash
             if (!previousBlock.hash.equals(currentBlock.previousHash)) {
-                System.out.println("#Previous Hashes not equal");
+                System.out.println("이전 해시가 같지 않음");
                 return false;
             }
             //check if hash is solved
             if (!currentBlock.hash.substring(0, difficulty).equals(hashTarget)) {
-                System.out.println("#This block hasn't been mined");
+                System.out.println("#이 블록은 채굴되지 않았습니다");
                 return false;
             }
 
@@ -95,11 +95,11 @@ public class NoobChain {
                 Transaction currentTransaction = currentBlock.transactions.get(t);
 
                 if (!currentTransaction.verifiySignature()) {
-                    System.out.println("#Signature on Transaction(" + t + ") is Invalid");
+                    System.out.println("#거래 서명(" + t + ") 유효하지 않다");
                     return false;
                 }
                 if (currentTransaction.getInputsValue() != currentTransaction.getOutputsValue()) {
-                    System.out.println("#Inputs are note equal to outputs on Transaction(" + t + ")");
+                    System.out.println("#\n입력은 트랜잭션의 출력과 동일합니다(" + t + ")");
                     return false;
                 }
 
@@ -107,12 +107,12 @@ public class NoobChain {
                     tempOutput = tempUTXOs.get(input.transactionOutputId);
 
                     if (tempOutput == null) {
-                        System.out.println("#Referenced input on Transaction(" + t + ") is Missing");
+                        System.out.println("#트랜잭션에 대한 참조 입력\n(" + t + ") 누락");
                         return false;
                     }
 
                     if (input.UTXO.value != tempOutput.value) {
-                        System.out.println("#Referenced input Transaction(" + t + ") value is Invalid");
+                        System.out.println("#참조된 입력 트랜잭션(" + t + ") 값이 잘못되었습니다");
                         return false;
                     }
 
@@ -124,18 +124,18 @@ public class NoobChain {
                 }
 
                 if (currentTransaction.outputs.get(0).reciepient != currentTransaction.reciepient) {
-                    System.out.println("#Transaction(" + t + ") output reciepient is not who it should be");
+                    System.out.println("#거래(" + t + ") 출력 수신자는 원래 있어야 하는 사람이 아닙니다.");
                     return false;
                 }
                 if (currentTransaction.outputs.get(1).reciepient != currentTransaction.sender) {
-                    System.out.println("#Transaction(" + t + ") output 'change' is not sender.");
+                    System.out.println("#거래(" + t + ") 출력 '변경'은 발신자가 아닙니다.");
                     return false;
                 }
 
             }
 
         }
-        System.out.println("Blockchain is valid");
+        System.out.println("블록체인은 유효합니다");
         return true;
     }
 
