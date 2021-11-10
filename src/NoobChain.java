@@ -8,7 +8,7 @@ public class NoobChain extends isChainValid{
     public static ArrayList<Block> blockchain = new ArrayList<Block>();
     public static HashMap<String, TransactionOutputs> UTXOs = new HashMap<String, TransactionOutputs>();
 
-    public static int difficulty = 3;
+    public static int difficulty = 5;
     public static float minimumTransaction = 0.1f;
     public static Wallet walletA;
     public static Wallet walletB;
@@ -22,8 +22,19 @@ public class NoobChain extends isChainValid{
         walletA = new Wallet();
         walletB = new Wallet();
         Wallet coinbase = new Wallet();
+        System.out.println("동훈이의 Private key");
+        System.out.println(StringUtil.getStringFromKey(walletA.privateKey));
+        System.out.println("동훈이의 public key");
+        System.out.println(StringUtil.getStringFromKey(walletA.publicKey));
+
+
+        System.out.println("민재의 Private key");
+        System.out.println(StringUtil.getStringFromKey(walletB.privateKey));
+        System.out.println("민재의 public key");
+        System.out.println(StringUtil.getStringFromKey(walletB.publicKey));
 
         //100 NoobCoin을 walletA로 보내는 제네시스 트랜잭션 생성:
+
         genesisTransaction = new Transaction(coinbase.publicKey, walletA.publicKey, 100f, null);
         genesisTransaction.generateSignature(coinbase.privateKey);     //manually sign the genesis transaction
         genesisTransaction.transactionId = "0"; //manually set the transaction id

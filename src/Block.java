@@ -38,7 +38,7 @@ public class Block {
             nonce++;
             hash = calculateHash();
         }
-        System.out.println("블록 채굴!!! : " + hash);
+        System.out.println("블록 생성!!! : " + hash);
     }
 
     //이 블록에 트랜잭션 추가
